@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Envelope Printer</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-envelope"></i> Envelope Printer</h1>
+                <p>Print addresses on envelopes with style and precision</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- File Upload Section -->
+            <section class="upload-section">
+                <div class="upload-card">
+                    <div class="upload-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <h2>Upload Address File</h2>
+                    <p>Select a CSV or Excel file containing your addresses</p>
+                    
+                    <div class="file-input-wrapper">
+                        <input type="file" id="fileInput" accept=".csv,.xlsx,.xls" class="file-input">
+                        <label for="fileInput" class="file-label">
+                            <i class="fas fa-plus"></i> Choose File
+                        </label>
+                    </div>
+                    
+                    <div class="file-info" id="fileInfo" style="display: none;">
+                        <i class="fas fa-file-alt"></i>
+                        <span id="fileName"></span>
+                        <button class="remove-file" id="removeFile">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section class="settings-section" id="settingsSection" style="display: none;">
+                <div class="settings-card">
+                    <h2><i class="fas fa-cog"></i> Envelope Settings</h2>
+                    
+                    <div class="settings-grid">
+                        <div class="setting-group">
+                            <label for="envelopeSize">Envelope Size</label>
+                            <select id="envelopeSize" class="setting-input">
+                                <option value="standard">Standard (#10) - 4.125" × 9.5"</option>
+                                <option value="a4">A4 - 8.27" × 11.69"</option>
+                                <option value="legal">Legal - 8.5" × 14"</option>
+                                <option value="custom">Custom Size</option>
+                            </select>
+                        </div>
+
+                        <div class="setting-group" id="customSizeGroup" style="display: none;">
+                            <label>Custom Dimensions (inches)</label>
+                            <div class="custom-size-inputs">
+                                <input type="number" id="customWidth" placeholder="Width" step="0.1" class="setting-input">
+                                <input type="number" id="customHeight" placeholder="Height" step="0.1" class="setting-input">
+                            </div>
+                        </div>
+
+                        <div class="setting-group">
+                            <label for="fontSize">Font Size</label>
+                            <select id="fontSize" class="setting-input">
+                                <option value="12">12pt</option>
+                                <option value="14" selected>14pt</option>
+                                <option value="16">16pt</option>
+                                <option value="18">18pt</option>
+                            </select>
+                        </div>
+
+                        <div class="setting-group">
+                            <label for="fontFamily">Font Family</label>
+                            <select id="fontFamily" class="setting-input">
+                                <option value="Arial">Arial</option>
+                                <option value="Times New Roman">Times New Roman</option>
+                                <option value="Courier New">Courier New</option>
+                                <option value="Georgia">Georgia</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Address Preview Section -->
+            <section class="preview-section" id="previewSection" style="display: none;">
+                <div class="preview-header">
+                    <h2><i class="fas fa-eye"></i> Address Preview</h2>
+                    <div class="preview-controls">
+                        <span class="address-counter">
+                            <span id="currentAddress">1</span> of <span id="totalAddresses">0</span>
+                        </span>
+                        <div class="navigation-buttons">
+                            <button id="prevAddress" class="nav-btn">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button id="nextAddress" class="nav-btn">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="envelope-preview" id="envelopePreview">
+                    <div class="envelope-content">
+                        <div class="return-address">
+                            <div class="editable-field" id="returnAddress" contenteditable="true">
+                                Your Name<br>
+                                Your Address<br>
+                                City, State ZIP
+                            </div>
+                        </div>
+                        <div class="recipient-address" id="recipientAddress">
+                            <!-- Address will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons" id="actionButtons" style="display: none;">
+                <button class="btn btn-secondary" id="previewBtn">
+                    <i class="fas fa-eye"></i> Print Preview
+                </button>
+                <button class="btn btn-primary" id="printAllBtn">
+                    <i class="fas fa-print"></i> Print All Envelopes
+                </button>
+                <button class="btn btn-outline" id="printCurrentBtn">
+                    <i class="fas fa-print"></i> Print Current
+                </button>
+            </div>
+        </main>
+
+        <!-- Progress Indicator -->
+        <div class="progress-indicator" id="progressIndicator" style="display: none;">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p id="progressText">Processing addresses...</p>
+        </div>
+
+        <!-- Error Message -->
+        <div class="error-message" id="errorMessage" style="display: none;">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span id="errorText"></span>
+            <button class="close-error" id="closeError">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
