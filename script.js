@@ -451,11 +451,13 @@ class EnvelopePrinter {
                     }
                     .recipient-address { 
                         position: absolute; 
-                        bottom: 2in; 
-                        right: 1in; 
-                        font-size: ${this.settings.fontSize}px; 
+                        top: 50%; 
+                        left: 50%; 
+                        transform: translate(-50%, -50%);
+                        font-size: ${this.settings.fontSize}pt; 
                         font-weight: 500; 
                         line-height: 1.5;
+                        text-align: center;
                     }
                     @media print {
                         body { background: white; padding: 0; }
@@ -582,11 +584,13 @@ class EnvelopePrinter {
                     }
                     .recipient-address { 
                         position: absolute; 
-                        bottom: 2in; 
-                        right: 1in; 
+                        top: 50%; 
+                        left: 50%; 
+                        transform: translate(-50%, -50%);
                         font-size: ${this.settings.fontSize}pt; 
                         font-weight: 500; 
                         line-height: 1.5;
+                        text-align: center;
                     }
                     @page { 
                         margin: 0; 
